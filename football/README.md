@@ -13,4 +13,4 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 Create the cache folder before cron runs. Run the script once to generate football.json. Results are ordered by kickoff time, newest first. Output includes at most 12 matches and 14 table rows including headings. The feed keeps saved results on upstream failure and displays a warning. BBC page structure is an unofficial data dependency and may change.
 
-TRMNL: create a new private plugin, Polling, GET https://salsbury.uk/trmnl/football.json, no headers or body, refresh every 15 minutes. Paste football/full.liquid into Full markup and use landscape orientation. Add to playlist. Existing rowing plugin is separate.
+TRMNL: create a new private plugin, Polling, GET https://salsbury.uk/trmnl/football.json, no headers or body, refresh every 15 minutes. Follow INSTALL_LAYOUTS.md: paste shared.liquid into Shared, then each of the four layout files into its corresponding tab. Full markup requires the Shared template. Use landscape orientation. Add to playlist. Existing rowing plugin is separate.
