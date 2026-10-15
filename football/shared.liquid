@@ -1,68 +1,69 @@
 <style>
-.petes-football.layout { height:100%; justify-content:flex-start; font-family:"Courier New",monospace; }
-.petes-football .pf-head { border-bottom:3px solid currentColor; padding-bottom:5px; }
-.petes-football .pf-title { font-family:inherit; font-size:28px; line-height:32px; }
-.petes-football .pf-sub { font-family:inherit; font-size:14px; line-height:22px; }
-.petes-football .pf-table { table-layout:fixed; border-collapse:collapse; }
-.petes-football .pf-table td { border:0; padding:1px 3px; white-space:nowrap; overflow:hidden; height:23px; font-family:inherit; font-size:18px; line-height:21px; color:inherit; }
-.petes-football .pf-team { width:38%; }
-.petes-football .pf-score { width:14%; }
+.petes-football.layout { height:100%; justify-content:flex-start; }
+.petes-football, .petes-football span { font-family:"Courier New",monospace; }
+.petes-football .pf-head { border-bottom:3px solid currentColor; }
+.petes-football .pf-results { flex:1; min-height:0; overflow:hidden; }
+.petes-football .pf-table { table-layout:fixed; }
+.petes-football .pf-table td { color:inherit; border:0; }
+.petes-football .pf-team { width:37%; }
+.petes-football .pf-score { width:16%; }
 .petes-football .pf-note { width:10%; }
-.petes-football .pf-table .pf-heading { background:#fff; color:#000; font-size:16px; font-weight:bold; }
-.petes-football .pf-table .pf-note { font-size:12px; }
-.petes-football .pf-foot { margin-top:auto; border-top:2px solid currentColor; font-size:12px; line-height:18px; }
-.petes-football--narrow .pf-title { font-size:21px; line-height:26px; }
-.petes-football--narrow .pf-sub { font-size:11px; }
-.petes-football--narrow .pf-table td { font-size:14px; }
-.petes-football--narrow .pf-table .pf-heading { font-size:12px; }
-.petes-football--narrow .pf-table .pf-note { font-size:10px; }
-.petes-football--short .pf-title { font-size:21px; line-height:26px; }
-.petes-football--short .pf-sub { line-height:18px; }
-.petes-football--short .pf-table td { height:19px; line-height:17px; font-size:15px; }
-.petes-football--short.petes-football--narrow .pf-table td { font-size:13px; }
-.petes-football--short .pf-table .pf-heading { font-size:12px; }
-.petes-football--short .pf-table .pf-note { font-size:10px; }
+.petes-football .pf-heading { background:#fff; color:#000; }
+.petes-football .pf-foot { border-top:2px solid currentColor; flex-shrink:0; }
 </style>
 
 {% template football_results %}
-<div class="petes-football {{ size_class }} layout layout--col layout--top bg--black text--white gap--none p--2">
-  <div class="pf-head flex flex--row flex--between w--full">
-    <span class="pf-title title text--white">302 FOOTBALL</span>
-    <span class="pf-sub label text--white">RESULTS</span>
+{% assign team_type = 'text--base lg:text--large' %}
+{% assign table_type = 'table--base lg:table--large' %}
+{% if size_class contains 'narrow' or size_class contains 'short' %}
+  {% assign team_type = 'text--small lg:text--base' %}
+  {% assign table_type = 'table--xsmall lg:table--base' %}
+{% endif %}
+<div class="petes-football layout layout--col layout--top bg--black text--white gap--small p--2">
+  <div class="pf-head flex flex--row flex--between w--full pb--1">
+    <span class="text--large lg:text--xlarge portrait:text--large text--bold text--white">302 FOOTBALL</span>
+    <span class="text--small lg:text--base text--white">RESULTS</span>
   </div>
-  <div class="pf-sub flex flex--row flex--between w--full">
-    <span>MEN · FULL TIME</span>
-    <span>{{ checked | escape }}</span>
+  <div class="flex flex--row flex--between w--full">
+    <span class="text--small lg:text--base text--white">MEN · FULL TIME</span>
+    <span class="text--small lg:text--base text--white">{{ checked | escape }}</span>
   </div>
-  <table class="pf-table table table--condensed w--full">
-    <colgroup>
-      <col class="pf-team"><col class="pf-score">
-      <col class="pf-team"><col class="pf-note">
-    </colgroup>
-    <tbody>
-      {% for row in result_lines limit: row_limit %}
-        {% if row.kind == 'heading' %}
-          {% unless forloop.last %}
+  <div class="pf-results w--full">
+    <table class="pf-table table {{ table_type }} w--full"
+      data-table-limit="true"
+      data-table-max-height="auto"
+      data-table-overflow-counter="false">
+      <colgroup>
+        <col class="pf-team"><col class="pf-score">
+        <col class="pf-team"><col class="pf-note">
+      </colgroup>
+      <tbody>
+        {% for row in result_lines limit: row_limit %}
+          {% if row.kind == 'heading' %}
+            {% unless forloop.last %}
+              <tr>
+                <td colspan="4" class="pf-heading text--left">
+                  <span class="text--small lg:text--base text--black text--bold" data-clamp="1">{{ row.text | escape }}</span>
+                </td>
+              </tr>
+            {% endunless %}
+          {% else %}
             <tr>
-              <td colspan="4" class="pf-heading text--left">{{ row.text | escape }}</td>
+              <td class="text--left"><span class="{{ team_type }} text--white" data-clamp="1">{{ row.home | escape }}</span></td>
+              <td class="text--center"><span class="{{ team_type }} text--white text--bold">{{ row.home_score }}-{{ row.away_score }}</span></td>
+              <td class="text--left"><span class="{{ team_type }} text--white" data-clamp="1">{{ row.away | escape }}</span></td>
+              <td class="text--right"><span class="text--small lg:text--base text--white" data-clamp="1">{{ row.note | escape }}</span></td>
             </tr>
-          {% endunless %}
-        {% else %}
-          <tr>
-            <td class="text--left">{{ row.home | truncate: name_limit | escape }}</td>
-            <td class="text--center"><strong>{{ row.home_score }}-{{ row.away_score }}</strong></td>
-            <td class="text--left">{{ row.away | truncate: name_limit | escape }}</td>
-            <td class="pf-note text--right">{{ row.note | escape }}</td>
-          </tr>
-        {% endif %}
-      {% endfor %}
-    </tbody>
-  </table>
-  {% if result_lines == empty or result_lines == nil %}
-    <div class="description text--white">No completed results available.</div>
-  {% endif %}
-  <div class="pf-foot w--full text--white">
-    {{ feed_warning | default: 'BBC Sport · FT / AET / PENS' | escape }}
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if result_lines == empty or result_lines == nil %}
+      <div class="description text--white">No completed results available.</div>
+    {% endif %}
+  </div>
+  <div class="pf-foot w--full pt--1">
+    <span class="text--small lg:text--base text--white">{{ feed_warning | default: 'BBC Sport · FT / AET / PENS' | escape }}</span>
   </div>
 </div>
 {% endtemplate %}
