@@ -1,0 +1,17 @@
+- keyname: author_info
+  name: About This Plugin
+  category: sports
+  field_type: author_bio
+  description: >-
+    A Ceefax-inspired display of recent completed men's football matches.
+    Covers the Premier League, Championship, FA Cup, League Cup,
+    Community Shield, European club competitions and major international
+    competitions. Results include scores and indicators for extra time
+    and penalties where available. The monochrome layout is designed
+    for easy reading on an e-ink screen. Results come from a shared
+    feed hosted by Pete Salsbury and refreshed every fifteen minutes.
+    No account or API key is required. Match data comes from BBC Sport.
+    This is an independent community project, with no affiliation to
+    or endorsement by the BBC, Ceefax or the competitions shown.
+    Please report problems through the project's GitHub repository.
+  github_url: https://github.com/psalsbury/PetesTRML
