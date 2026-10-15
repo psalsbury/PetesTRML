@@ -1,0 +1,16 @@
+# TRMNL football results
+
+Men's completed results from BBC Sport, displayed in a monochrome Ceefax layout.
+
+Install football/update_trmnl_football.py at /var/www/salsbury.uk/football/update_trmnl_football.py and run with Python 3. Requires zoneinfo system time zone data and no third-party packages.
+
+Cron (/etc/cron.d/trmnl-football):
+```
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+*/15 * * * * root /usr/bin/python3 /var/www/salsbury.uk/football/update_trmnl_football.py > /var/www/salsbury.uk/.trmnl-football-cache/update.log 2>&1
+```
+
+Create the cache folder before cron runs. Run the script once to generate football.json. Results are ordered by kickoff time, newest first. Output includes at most 12 matches and 14 table rows including headings. The feed keeps saved results on upstream failure and displays a warning. BBC page structure is an unofficial data dependency and may change.
+
+TRMNL: create a new private plugin, Polling, GET https://salsbury.uk/trmnl/football.json, no headers or body, refresh every 15 minutes. Paste football/full.liquid into Full markup and use landscape orientation. Add to playlist. Existing rowing plugin is separate.
