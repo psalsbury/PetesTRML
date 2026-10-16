@@ -15,7 +15,7 @@ $device = $_GET['device'] ?? '';
 if (!is_string($device) || !preg_match('/^[A-Za-z0-9_-]{1,128}$/D', $device)) {
     respond(['error'=>'Provide a unique device ID: ?device=your-device-name'], 400);
 }
-$rows = filter_var($_GET['rows'] ?? 14, FILTER_VALIDATE_INT);
+$rows = filter_var($_GET['rows'] ?? 6, FILTER_VALIDATE_INT);
 if ($rows === false || $rows < 3 || $rows > 14) respond(['error'=>'rows must be between 3 and 14'], 400);
 try {
     $feed = json_decode(file_get_contents(__DIR__.'/football.json'), true, 512, JSON_THROW_ON_ERROR);
@@ -57,6 +57,8 @@ try {
     $db->exec('COMMIT');
     $feed['lines'] = $pages[$page];
     $feed['count'] = count(array_filter($feed['lines'], fn($row)=>$row['kind']==='match'));
+    $feed['total_count'] = count($feed['matches'] ?? []);
+    $feed['row_budget'] = $rows;
     $feed['page_number'] = $page + 1;
     $feed['page_count'] = count($pages);
     $feed['page_label'] = ($page + 1).'/'.count($pages);
