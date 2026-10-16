@@ -22,7 +22,7 @@
 <div class="petes-football layout layout--col layout--top bg--black text--white gap--small p--2">
   <div class="pf-head flex flex--row flex--between w--full pb--1">
     <span class="text--large lg:text--xlarge portrait:text--large text--bold text--white">302 FOOTBALL</span>
-    <span class="text--small lg:text--base text--white">RESULTS</span>
+    <span class="text--small lg:text--base text--white">RESULTS {{ pagination | default: '1/1' | escape }}</span>
   </div>
   <div class="flex flex--row flex--between w--full">
     <span class="text--small lg:text--base text--white">MEN · FULL TIME</span>
