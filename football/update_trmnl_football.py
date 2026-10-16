@@ -114,6 +114,9 @@ def atomic(path,data):
  os.replace(tmp,path)
 
 def build(matches,now,errors):
+ # Keep every result from the latest UK match date; never top up from older days.
+ latest=max((m['date_iso'] for m in matches),default=None)
+ matches=[m for m in matches if m['date_iso']==latest]
  matches=sorted({m['id']:m for m in matches}.values(),key=lambda m:(m['kickoff'],m['competition'],m['home']),reverse=True)
  # 14 text lines, including date/competition headings; at most 12 results.
  lines=[];last=None;shown=0
@@ -126,7 +129,7 @@ def build(matches,now,errors):
   lines.append({'kind':'match',**m});shown+=1
  return {'title':'FOOTBALL RESULTS','page':'302','updated':now.astimezone(TZ).strftime('%d %b %H:%M'),
   'checked_at':now.isoformat(),'source':'BBC Sport','warning':'Some dates could not be checked' if errors else '',
-  'count':shown,'lines':lines,'matches':matches[:60],
+  'count':shown,'lines':lines,'matches':matches,
   'message':'' if lines else 'No completed matches found in the last 30 days.'}
 
 def main():
@@ -138,7 +141,7 @@ def main():
   matches=[];errors=[]
   for offset in range(30):
    matches.extend(fetch_day(today-dt.timedelta(days=offset),today,now,errors))
-   if len(matches)>=24 and offset>=1:break
+   if matches:break
   data=build(matches,now,errors)
   if not data['lines'] and errors and (OUT/'football.json').exists():
    old=json.loads((OUT/'football.json').read_text())
