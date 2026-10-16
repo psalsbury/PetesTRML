@@ -12,7 +12,7 @@ Full and Half vertical can use the default 14 rows. If one installation is used 
 
 Paste shared.liquid into Shared, then full.liquid, half_horizontal.liquid, half_vertical.liquid and quadrant.liquid into the matching tabs. Save. All four render calls pass page_label to the Shared template.
 
-Each poll advances one page, wrapping at the end. Requests repeated within 30 seconds return the same page to protect against immediate retries. HEAD requests do not advance. New or corrected results restart at page 1; timestamp-only updates do not. The server paginates all matches retained in football.json, with a repeated competition/date heading on each page. The current generator retains up to 60 matches from its recent-day search. It is not a complete 30-day archive.
+Each poll advances one page, wrapping at the end. Requests repeated within 30 seconds return the same page to protect against immediate retries. HEAD requests do not advance. New or corrected results restart at page 1; timestamp-only updates do not. The server paginates all matches retained in football.json, with a repeated competition/date heading on each page. The generator searches back up to 30 days and retains every eligible completed result from the first date with matches. There is no total match cap and no topping up from older dates.
 
 The old football.json URL remains available as the static first-page feed. Changing only markup will not enable cycling: update the polling URL too.
 
