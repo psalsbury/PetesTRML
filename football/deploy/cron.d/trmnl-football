@@ -1,0 +1,3 @@
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+*/15 * * * * root /usr/bin/python3 /var/www/salsbury.uk/tools/update_trmnl_football.py > /var/www/salsbury.uk/.trmnl-football-cache/update.log 2>&1
